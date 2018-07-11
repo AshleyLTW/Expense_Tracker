@@ -34,11 +34,12 @@ with open(downloadedFile) as myfile:
 limiter = sys.argv[2]
 with open('output.csv', 'a', newline='') as output:
 	writer = csv.writer(output, delimiter=',')
-	writer.writerow(['Item', 'Date', 'Amount'])
+	writer.writerow(['Date', 'Item', 'Amount'])
 	### Combine purchases with the same category + date and write it
-	for row in cursor.execute("SELECT item, date, sum(amount) FROM expenses WHERE date>'" + limiter + "' GROUP BY date, item ORDER BY date ASC;"):
+	for row in cursor.execute("SELECT date, item, sum(amount) FROM expenses WHERE date>'" + limiter + "' GROUP BY date, item ORDER BY date ASC;"):
 		writer.writerow(row)
 
+# TO DO: get less lazy and actually use argparse to fix this
 ### Begin writing to new CSV file with no date restriction
 # else:
 # 	with open('output.csv', 'a', newline='') as output:
