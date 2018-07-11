@@ -15,7 +15,9 @@ with open(downloadedFile) as myfile:
 		item = row['Category']
 		date = row['Date']
 		amount = row['Value']
-		
+		if amount[0] == "-":
+			amount = amount[1:]
+
 		insert = "INSERT INTO expenses VALUES('" + item + "', '" + date + "', " + amount + ");"
 		cursor.execute(insert) 
 
