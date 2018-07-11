@@ -5,7 +5,7 @@ import csv, sys, sqlite3
 connection = sqlite3.connect("foo.db")
 cursor = connection.cursor()
 
-create = "CREATE TABLE expenses(item text not null);"
+create = "CREATE TABLE Expenses(item text not null, date text not null, amount float not null);"
 cursor.execute(create)
 
 downloadedFile = sys.argv[1]
@@ -13,9 +13,11 @@ with open(downloadedFile) as myfile:
 	readCSV = csv.DictReader(myfile)
 	for row in readCSV:
 		item = row['Category']
+		date = row['Date']
+		amount = row['Value']
 		
-		insert = "INSERT INTO expenses VALUES(?);"
-		cursor.execute(insert, (item,)) # Necessary beacuse python sees each char as separate bind values (it is regarded as a grouped expression not a tuple)
+		insert = "INSERT INTO expenses VALUES('" + item + "', '" + date + "', " + amount + ");"
+		cursor.execute(insert) 
 
 cursor.close()
 connection.commit()	
