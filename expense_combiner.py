@@ -2,6 +2,7 @@ import csv, sys, sqlite3, re
 # import argparse as ap
 
 # python3 [script name] [downloaded file] [date limitation]
+# make sure to delete foo.db and output.csv
 
 connection = sqlite3.connect("foo.db")
 cursor = connection.cursor()
@@ -34,10 +35,13 @@ with open(downloadedFile) as myfile:
 limiter = sys.argv[2]
 with open('output.csv', 'a', newline='') as output:
 	writer = csv.writer(output, delimiter=',')
-	writer.writerow(['Date', 'Item', 'Amount'])
+	writer.writerow(['Item', 'Date', 'Amount'])
 	### Combine purchases with the same category + date and write it
-	for row in cursor.execute("SELECT date, item, sum(amount) FROM expenses WHERE date>'" + limiter + "' GROUP BY date, item ORDER BY date ASC;"):
+	for row in cursor.execute("SELECT item, date, sum(amount) FROM expenses WHERE date>'" + limiter + "' GROUP BY date, item ORDER BY item ASC;"):
 		writer.writerow(row)
+	# ### Combine purchases with the same category and write it
+	# for row in cursor.execute("SELECT item, sum(amount) FROM expenses WHERE date>'" + limiter + "' GROUP BY item ORDER BY item ASC;"):
+	# 	writer.writerow(row)
 
 # TO DO: get less lazy and actually use argparse to fix this
 ### Begin writing to new CSV file with no date restriction
